@@ -1,0 +1,190 @@
+#:import App kivy.app
+#:import Label kivy.uix.label
+#:import Widget kivy.uix.widget
+#:import FloatLayout kivy.uix.floatlayout
+#:import Button kivy.uix.button
+#:import Builder kivy.lang.builder
+#:import ScreenManager kivy.uix.screenmanager
+#:import Screen kivy.uix.screenmanager
+#:import MapView kivy_garden.mapview
+#:import CoreText kivy.core.text
+
+
+
+WindowManager:
+    StartScreen:
+    SearchLocation:
+    ERNearMe:
+    PoliceNearMe:
+    EmergencyNumbers:
+
+
+
+<StartScreen>:
+    name: "StartScreen"
+
+    FloatLayout:
+        canvas.before:  
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Button:
+            text: "Search Location"
+            pos_hint: {"center_x": 0.5,"top": 0.90}
+            size_hint: 0.22, 0.22
+            font_size: 11
+            on_release:
+                app.root.current = "SearchLocation"
+                root.manager.transition.direction = "right"
+            
+
+        Button: 
+            text: "ER Near Me"
+            pos_hint: {"center_x": 0.5,"top": 0.70}
+            size_hint: 0.22, 0.22
+            font_size: 11
+        
+        Button: 
+            text: "Police Station Near Me"
+            pos_hint: {"center_x": 0.5,"top": 0.50}
+            size_hint: 0.22, 0.22
+            font_size: 11
+            on_release:
+                app.root.current = "PoliceNearMe"
+                root.manager.transition.direction = "right"
+        
+        Button: 
+            text: "Emergency Numbers"
+            pos_hint: {"center_x": 0.5,"top": 0.30}
+            size_hint: 0.22, 0.22
+            font_size: 11
+            on_release:
+                app.root.current = "EmergencyNumbers"
+                root.manager.transition.direction = "right"
+
+<SearchLocation>:
+    name: "SearchLocation"
+
+    FloatLayout:
+
+
+        Label:
+            text: "Enter location:"
+            pos_hint: {"x": -0.3, "y": -0.025}
+            
+
+
+        TextInput:
+            pos_hint: {"center_x": 0.5,"top": 0.5}
+            size_hint: 0.40, 0.05
+            id: searchloc
+            multiline: False
+
+        Button:
+            id: srch
+            text: "Search"
+            pos_hint: {"center_x": 0.5,"top": 0.25}
+            size_hint: 0.15, 0.15
+            font_size: 11
+            #on_press: root.###()
+
+        Button:
+            id: bck
+            text: "Back"
+            pos_hint: {"x": 0.80,"top": 0.25}
+            size_hint: 0.15, 0.15
+            font_size: 11
+            on_release: 
+                app.root.current = "StartScreen"
+                root.manager.transition.direction = "left"
+
+
+
+
+<PoliceNearMe>:
+    name: "PoliceNearMe"
+    FloatLayout:
+        
+        MapView:
+            lat:-25.4878
+            lon:25.98517 
+            zoom: 5
+            on_zoom:
+                self.zoom = 5 if self.zoom < 5 else self.zoom
+            double_tap_zoom:True
+            
+            Button:
+                text: "Back"
+                size_hint: 0.15, 0.15
+                pos_hint:{"x": 0.5, "top": 0.25}
+                font_size: 11
+                on_release: 
+                    app.root.current = "StartScreen"
+                    root.manager.transition.direction = "left"
+            MapMarkerPopup:
+                source: 'marker2.png'
+                lat:-32.42247
+                lon:26.78883
+                Button:
+                    text:'KOLOMANE'
+                    color: 0,0,0,1
+                    size: self.texture_size
+                    size_hint: None, None
+                    on_press: root.button_on()
+                    on_release: 
+                        #:import webbrowser webbrowser
+                        webbrowser.open('https://www.google.com/maps/dir/?api=1&destination=KOLOMANE+police+station&travelmode=driving')
+                        root.button_off()
+
+                    
+                    Image:
+                        id: MapButton
+                        source: 'MapMarker Button up.png' 
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        size: 270, 200
+                        
+                        size_hint: None, None
+                        
+                        Label:
+                            text:'KOLOMANE'
+                            font_size: 14
+                            color: 0.3,0.3,0.3,1
+                            center_x: self.parent.center_x
+                            center_y: self.parent.center_y
+<EmergencyNumbers>:
+    name: "EmergencyNumbers"
+    
+    GridLayout:
+        cols: 2
+        
+        Button:
+            text: "Police"
+            
+        Button:
+            text: "Medical"
+            
+        Button:
+            text: "Fire"
+            
+        Button:
+            text: "Animal"
+            
+        Button:
+            text: "Poison"
+            
+        Button:
+            text: "Child Abuse"
+            
+        Button:
+            text: "Suicide"
+            
+        
+        Button:
+            text: "Back"
+            size_hint: 0.15, 0.15
+            font_size: 11
+            on_release: 
+                app.root.current = "StartScreen"
+                root.manager.transition.direction = "left"

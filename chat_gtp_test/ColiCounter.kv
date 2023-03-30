@@ -1,0 +1,70 @@
+ColiCounter:
+<ColiCounter>:
+    orientation: 'vertical'
+
+    BoxLayout:
+        id: menu
+        size_hint: 1, None
+        height: "48dp"
+        ToggleButton:
+            text: "Show/Hide"
+            on_press:
+                colicounter.opacity = 1 if self.state == 'down' else 0
+                colicounter.size_hint = (1, 1) if self.state == 'down' else (0, 0)
+        ToggleButton:
+            text: "Show/Hide"
+            on_press:
+                addcoli.opacity = 1 if self.state == 'down' else 0
+                addcoli.size_hint = (1, 1) if self.state == 'down' else (0, 0)
+
+    BoxLayout:
+        BoxLayout:
+            id: colicounter
+            opacity: 1
+            size_hint: 1, 1
+            pos_hint: {"left": 0}
+            height: self.minimum_height
+            padding: 50
+            orientation: 'vertical'
+
+            Label:
+                id: elapsed_time_label
+                text: 'Elapsed time: 00:00:00'
+                font_size: 20
+
+            Button:
+                id: stopwatch_button
+                text: 'Start' if not root.stopwatch_running else 'Pause'
+                font_size: 20
+                on_press: root.toggle_stopwatch()
+
+        BoxLayout:
+            id: addcoli
+            opacity: 1
+            height: self.minimum_height
+            padding: 50
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    id: coli_per_hour
+                    text: "Coli per hour: 0"
+                    font_size: 20
+
+                Label:
+                    text: 'Total Coli: {}'.format(root.total_coli)
+                    font_size: '40sp'
+                    color: 0.8, 0, 0.2, 1
+
+                BoxLayout:
+                    padding: 60
+                    TextInput:
+                        id: coli_input
+                        multiline: False
+                        font_size: '30sp'
+                        input_filter: 'int'
+
+                    Button:
+                        text: 'Add Coli'
+                        font_size: '20sp'
+                        on_release: root.add_coli(int(coli_input.text) if coli_input.text else 0)
+
